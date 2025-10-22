@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Life Manager Pro</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Sidebar -->
+      <nav class="sidebar">
+        <div class="sidebar-header">
+          <h2><i class="fas fa-life-ring"></i> Life Manager</h2>
+        </div>
+        <ul class="sidebar-menu">
+          <li class="menu-item active" data-module="todo">
+            <i class="fas fa-tasks"></i>
+            <span>To-Do Liste</span>
+          </li>
+          <li class="menu-item" data-module="finance">
+            <i class="fas fa-chart-line"></i>
+            <span>Finanz Tracker</span>
+          </li>
+          <li class="menu-item" data-module="habits">
+            <i class="fas fa-calendar-check"></i>
+            <span>Habits Tracker</span>
+          </li>
+          <li class="menu-item" data-module="goals">
+            <i class="fas fa-bullseye"></i>
+            <span>Ziele</span>
+          </li>
+          <li class="menu-item" data-module="notes">
+            <i class="fas fa-sticky-note"></i>
+            <span>Notizen</span>
+          </li>
+          <li class="menu-item" data-module="time">
+            <i class="fas fa-clock"></i>
+            <span>Zeit Tracker</span>
+          </li>
+          <li class="menu-item" data-module="mood">
+            <i class="fas fa-smile"></i>
+            <span>Stimmung</span>
+          </li>
+          <li class="menu-item" data-module="health">
+            <i class="fas fa-heartbeat"></i>
+            <span>Gesundheit</span>
+          </li>
+          <li class="menu-item" data-module="learning">
+            <i class="fas fa-graduation-cap"></i>
+            <span>Lernen</span>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- TO-DO Module -->
+        <div class="module active" id="todo-module">
+          <div class="module-header">
+            <h1><i class="fas fa-tasks"></i> To-Do Liste</h1>
+          </div>
+          <div class="module-content">
+            <div class="input-group">
+              <input
+                type="text"
+                id="todo-input"
+                placeholder="Neue Aufgabe hinzufügen..."
+              />
+              <button id="add-todo">
+                <i class="fas fa-plus"></i> Hinzufügen
+              </button>
+            </div>
+            <div class="filter-buttons">
+              <button class="filter-btn active" data-filter="all">Alle</button>
+              <button class="filter-btn" data-filter="pending">Offen</button>
+              <button class="filter-btn" data-filter="completed">
+                Erledigt
+              </button>
+            </div>
+            <ul id="todo-list"></ul>
+          </div>
+        </div>
+
+        <!-- Finance Module -->
+        <div class="module" id="finance-module">
+          <div class="module-header">
+            <h1><i class="fas fa-chart-line"></i> Finanz Tracker</h1>
+          </div>
+          <div class="module-content">
+            <div class="finance-overview">
+              <div class="balance-card">
+                <h3>Kontostand</h3>
+                <span id="balance">€0.00</span>
+              </div>
+              <div class="income-card">
+                <h3>Einnahmen (Monat)</h3>
+                <span id="monthly-income">€0.00</span>
+              </div>
+              <div class="expense-card">
+                <h3>Ausgaben (Monat)</h3>
+                <span id="monthly-expenses">€0.00</span>
+              </div>
+            </div>
+            <div class="transaction-form">
+              <h3>Transaktion hinzufügen</h3>
+              <div class="form-group">
+                <input
+                  type="text"
+                  id="transaction-description"
+                  placeholder="Beschreibung"
+                />
+                <input
+                  type="number"
+                  id="transaction-amount"
+                  placeholder="Betrag"
+                  step="0.01"
+                />
+                <select id="transaction-type">
+                  <option value="income">Einnahme</option>
+                  <option value="expense">Ausgabe</option>
+                </select>
+                <button id="add-transaction">
+                  <i class="fas fa-plus"></i> Hinzufügen
+                </button>
+              </div>
+            </div>
+            <div class="transactions-list">
+              <h3>Letzte Transaktionen</h3>
+              <ul id="transactions-list"></ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Habits Module -->
+        <div class="module" id="habits-module">
+          <div class="module-header">
+            <h1><i class="fas fa-calendar-check"></i> Habits Tracker</h1>
+          </div>
+          <div class="module-content">
+            <div class="habit-form">
+              <input
+                type="text"
+                id="habit-input"
+                placeholder="Neue Gewohnheit..."
+              />
+              <button id="add-habit">
+                <i class="fas fa-plus"></i> Hinzufügen
+              </button>
+            </div>
+            <div class="habits-grid" id="habits-container"></div>
+          </div>
+        </div>
+
+        <!-- Goals Module -->
+        <div class="module" id="goals-module">
+          <div class="module-header">
+            <h1><i class="fas fa-bullseye"></i> Ziele</h1>
+          </div>
+          <div class="module-content">
+            <div class="goal-form">
+              <input type="text" id="goal-input" placeholder="Neues Ziel..." />
+              <input type="date" id="goal-deadline" />
+              <button id="add-goal">
+                <i class="fas fa-plus"></i> Hinzufügen
+              </button>
+            </div>
+            <div class="goals-list" id="goals-container"></div>
+          </div>
+        </div>
+
+        <!-- Notes Module -->
+        <div class="module" id="notes-module">
+          <div class="module-header">
+            <h1><i class="fas fa-sticky-note"></i> Notizen</h1>
+          </div>
+          <div class="module-content">
+            <div class="note-form">
+              <input type="text" id="note-title" placeholder="Titel..." />
+              <textarea
+                id="note-content"
+                placeholder="Notiz schreiben..."
+              ></textarea>
+              <button id="add-note">
+                <i class="fas fa-plus"></i> Speichern
+              </button>
+            </div>
+            <div class="notes-grid" id="notes-container"></div>
+          </div>
+        </div>
+
+        <!-- Time Tracker Module -->
+        <div class="module" id="time-module">
+          <div class="module-header">
+            <h1><i class="fas fa-clock"></i> Zeit Tracker</h1>
+          </div>
+          <div class="module-content">
+            <div class="timer-display">
+              <div class="timer" id="timer">00:00:00</div>
+              <div class="timer-controls">
+                <button id="start-timer">
+                  <i class="fas fa-play"></i> Start
+                </button>
+                <button id="pause-timer">
+                  <i class="fas fa-pause"></i> Pause
+                </button>
+                <button id="stop-timer">
+                  <i class="fas fa-stop"></i> Stop
+                </button>
+              </div>
+            </div>
+            <div class="time-sessions">
+              <h3>Zeit-Sessions</h3>
+              <ul id="sessions-list"></ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mood Module -->
+        <div class="module" id="mood-module">
+          <div class="module-header">
+            <h1><i class="fas fa-smile"></i> Stimmung</h1>
+          </div>
+          <div class="module-content">
+            <div class="mood-selector">
+              <h3>Wie fühlst du dich heute?</h3>
+              <div class="mood-options">
+                <button class="mood-btn" data-mood="1">😢</button>
+                <button class="mood-btn" data-mood="2">😕</button>
+                <button class="mood-btn" data-mood="3">😐</button>
+                <button class="mood-btn" data-mood="4">😊</button>
+                <button class="mood-btn" data-mood="5">😄</button>
+              </div>
+            </div>
+            <div class="mood-history">
+              <h3>Stimmungsverlauf</h3>
+              <div id="mood-chart"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Health Module -->
+        <div class="module" id="health-module">
+          <div class="module-header">
+            <h1><i class="fas fa-heartbeat"></i> Gesundheit</h1>
+          </div>
+          <div class="module-content">
+            <div class="health-metrics">
+              <div class="metric-card">
+                <h3>Schritte heute</h3>
+                <input
+                  type="number"
+                  id="steps-input"
+                  placeholder="Anzahl Schritte"
+                />
+                <button id="add-steps">Hinzufügen</button>
+              </div>
+              <div class="metric-card">
+                <h3>Gewicht</h3>
+                <input
+                  type="number"
+                  id="weight-input"
+                  placeholder="Gewicht in kg"
+                  step="0.1"
+                />
+                <button id="add-weight">Hinzufügen</button>
+              </div>
+              <div class="metric-card">
+                <h3>Wasser</h3>
+                <input
+                  type="number"
+                  id="water-input"
+                  placeholder="Gläser Wasser"
+                />
+                <button id="add-water">Hinzufügen</button>
+              </div>
+            </div>
+            <div class="health-history">
+              <h3>Gesundheitsdaten</h3>
+              <div id="health-data"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Learning Module -->
+        <div class="module" id="learning-module">
+          <div class="module-header">
+            <h1><i class="fas fa-graduation-cap"></i> Lernen</h1>
+          </div>
+          <div class="module-content">
+            <div class="learning-form">
+              <input
+                type="text"
+                id="skill-input"
+                placeholder="Neue Fähigkeit..."
+              />
+              <input
+                type="number"
+                id="skill-hours"
+                placeholder="Stunden gelernt"
+                step="0.5"
+              />
+              <button id="add-skill">
+                <i class="fas fa-plus"></i> Hinzufügen
+              </button>
+            </div>
+            <div class="skills-list" id="skills-container"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-title">Bearbeiten</h2>
+          <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+          <div id="modal-form"></div>
+        </div>
+        <div class="modal-footer">
+          <button id="save-edit" class="btn-primary">Speichern</button>
+          <button id="cancel-edit" class="btn-secondary">Abbrechen</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
