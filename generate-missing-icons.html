@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fehlende Icons Generator</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .icon-container {
+        display: inline-block;
+        margin: 10px;
+        text-align: center;
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      canvas {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+      .download-btn {
+        display: block;
+        margin-top: 10px;
+        padding: 8px 16px;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+      .download-btn:hover {
+        background: #5a67d8;
+      }
+      .instructions {
+        background: #e6fffa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid #38b2ac;
+      }
+      .missing {
+        background: #fff5f5;
+        border-left: 4px solid #e53e3e;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🚀 Fehlende Icons Generator</h1>
+
+    <div class="instructions missing">
+      <h3>⚠️ Fehlende Icons:</h3>
+      <p>Sie haben bereits 7 von 10 Icons! Es fehlen nur noch diese 3:</p>
+      <ul>
+        <li>icon-192x192.png</li>
+        <li>icon-384x384.png</li>
+        <li>icon-512x512.png</li>
+      </ul>
+    </div>
+
+    <div id="icons-container"></div>
+
+    <script>
+      // Nur die fehlenden Icons
+      const missingSizes = [192, 384, 512];
+      const container = document.getElementById("icons-container");
+
+      missingSizes.forEach((size) => {
+        const iconDiv = document.createElement("div");
+        iconDiv.className = "icon-container";
+
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d");
+
+        // Create gradient background
+        const gradient = ctx.createLinearGradient(0, 0, size, size);
+        gradient.addColorStop(0, "#667eea");
+        gradient.addColorStop(1, "#764ba2");
+
+        // Draw background
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, size, size);
+
+        // Draw icon (life ring symbol)
+        ctx.fillStyle = "white";
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = Math.max(2, size * 0.08);
+
+        // Outer ring
+        const outerRadius = size * 0.35;
+        const innerRadius = size * 0.25;
+        const centerX = size / 2;
+        const centerY = size / 2;
+
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, outerRadius, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        // Inner ring
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        // Cross in the center
+        const crossSize = size * 0.15;
+        ctx.lineWidth = Math.max(1, size * 0.06);
+        ctx.beginPath();
+        ctx.moveTo(centerX - crossSize, centerY);
+        ctx.lineTo(centerX + crossSize, centerY);
+        ctx.moveTo(centerX, centerY - crossSize);
+        ctx.lineTo(centerX, centerY + crossSize);
+        ctx.stroke();
+
+        // Add text label
+        const label = document.createElement("div");
+        label.textContent = `${size}x${size}`;
+        label.style.fontSize = "14px";
+        label.style.fontWeight = "bold";
+        label.style.marginTop = "8px";
+        label.style.color = "#4a5568";
+
+        // Add download button
+        const downloadBtn = document.createElement("button");
+        downloadBtn.textContent = "📥 Download";
+        downloadBtn.className = "download-btn";
+        downloadBtn.onclick = () => {
+          const link = document.createElement("a");
+          link.download = `icon-${size}x${size}.png`;
+          link.href = canvas.toDataURL();
+          link.click();
+        };
+
+        iconDiv.appendChild(canvas);
+        iconDiv.appendChild(label);
+        iconDiv.appendChild(downloadBtn);
+        container.appendChild(iconDiv);
+      });
+
+      // Add completion message
+      const completionText = document.createElement("div");
+      completionText.style.cssText = `
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0fff4;
+            border-radius: 8px;
+            border-left: 4px solid #48bb78;
+        `;
+      completionText.innerHTML = `
+            <h3>🎯 Nach dem Download:</h3>
+            <ol>
+                <li>Speichern Sie alle 3 Icons im <code>icons/</code> Ordner</li>
+                <li>Stellen Sie sicher, dass die Namen exakt sind: icon-192x192.png, icon-384x384.png, icon-512x512.png</li>
+                <li>Löschen Sie diese Generator-Datei</li>
+                <li>Testen Sie Ihre PWA!</li>
+            </ol>
+        `;
+      document.body.appendChild(completionText);
+    </script>
+  </body>
+</html>

@@ -1238,3 +1238,177 @@ class LifeManager {
 
 // Initialize the app
 const lifeManager = new LifeManager();
+
+// PWA Service Worker Registration
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then((registration) => {
+        console.log(
+          "Service Worker registered successfully:",
+          registration.scope
+        );
+
+        // Check for updates
+        registration.addEventListener("updatefound", () => {
+          const newWorker = registration.installing;
+          newWorker.addEventListener("statechange", () => {
+            if (
+              newWorker.state === "installed" &&
+              navigator.serviceWorker.controller
+            ) {
+              // New content is available, show update notification
+              if (
+                confirm(
+                  "Eine neue Version ist verfügbar. Möchten Sie die Seite neu laden?"
+                )
+              ) {
+                window.location.reload();
+              }
+            }
+          });
+        });
+      })
+      .catch((error) => {
+        console.log("Service Worker registration failed:", error);
+      });
+  });
+}
+
+// PWA Install Prompt
+let deferredPrompt;
+let installButton;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  console.log("PWA install prompt triggered");
+  // Prevent the mini-infobar from appearing on mobile
+  e.preventDefault();
+  // Stash the event so it can be triggered later
+  deferredPrompt = e;
+
+  // Show install button or banner
+  showInstallButton();
+});
+
+// Show install button
+function showInstallButton() {
+  // Create install button if it doesn't exist
+  if (!installButton) {
+    installButton = document.createElement("button");
+    installButton.textContent = "App installieren";
+    installButton.className = "install-button";
+    installButton.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      z-index: 1000;
+      transition: all 0.3s ease;
+    `;
+
+    installButton.addEventListener("click", installApp);
+    document.body.appendChild(installButton);
+  }
+
+  installButton.style.display = "block";
+}
+
+// Install app
+async function installApp() {
+  if (deferredPrompt) {
+    // Show the install prompt
+    deferredPrompt.prompt();
+
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === "accepted") {
+      console.log("User accepted the install prompt");
+    } else {
+      console.log("User dismissed the install prompt");
+    }
+
+    // Clear the deferredPrompt
+    deferredPrompt = null;
+
+    // Hide install button
+    if (installButton) {
+      installButton.style.display = "none";
+    }
+  }
+}
+
+// Handle app installed
+window.addEventListener("appinstalled", (evt) => {
+  console.log("PWA was installed");
+  // Hide install button
+  if (installButton) {
+    installButton.style.display = "none";
+  }
+});
+
+// Handle online/offline status
+window.addEventListener("online", () => {
+  console.log("App is online");
+  // Show online indicator
+  showStatusIndicator("online", "Verbindung wiederhergestellt");
+});
+
+window.addEventListener("offline", () => {
+  console.log("App is offline");
+  // Show offline indicator
+  showStatusIndicator("offline", "Offline-Modus aktiv");
+});
+
+// Show status indicator
+function showStatusIndicator(status, message) {
+  const indicator = document.createElement("div");
+  indicator.className = `status-indicator ${status}`;
+  indicator.textContent = message;
+  indicator.style.cssText = `
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: ${status === "online" ? "#48bb78" : "#e53e3e"};
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.3s ease;
+  `;
+
+  // Add animation keyframes
+  if (!document.querySelector("#status-animations")) {
+    const style = document.createElement("style");
+    style.id = "status-animations";
+    style.textContent = `
+      @keyframes slideDown {
+        from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+        to { transform: translateX(-50%) translateY(0); opacity: 1; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  document.body.appendChild(indicator);
+
+  // Remove indicator after 3 seconds
+  setTimeout(() => {
+    if (indicator.parentNode) {
+      indicator.parentNode.removeChild(indicator);
+    }
+  }, 3000);
+}
