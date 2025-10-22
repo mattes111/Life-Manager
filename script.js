@@ -12,6 +12,7 @@ class LifeManager {
     this.loadModule("todo");
     this.renderAllModules();
     this.setupModal();
+    this.setupMobileMenu();
   }
 
   // Setup all event listeners
@@ -69,6 +70,9 @@ class LifeManager {
     document.getElementById(`${moduleName}-module`).classList.add("active");
 
     this.currentModule = moduleName;
+
+    // Close mobile menu after selection
+    this.closeMobileMenu();
   }
 
   // Load module data
@@ -1233,6 +1237,85 @@ class LifeManager {
     this.renderMoodChart();
     this.renderHealthData();
     this.renderSkills();
+  }
+
+  // Mobile Menu Functions
+  setupMobileMenu() {
+    const mobileToggle = document.getElementById("mobile-menu-toggle");
+    const mobileClose = document.getElementById("mobile-close");
+    const sidebar = document.getElementById("sidebar");
+
+    // Toggle mobile menu
+    if (mobileToggle) {
+      mobileToggle.addEventListener("click", () => {
+        this.toggleMobileMenu();
+      });
+    }
+
+    // Close mobile menu
+    if (mobileClose) {
+      mobileClose.addEventListener("click", () => {
+        this.closeMobileMenu();
+      });
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener("click", (e) => {
+      if (window.innerWidth <= 768) {
+        if (!sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
+          this.closeMobileMenu();
+        }
+      }
+    });
+
+    // Close menu on escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        this.closeMobileMenu();
+      }
+    });
+
+    // Handle window resize
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 768) {
+        this.closeMobileMenu();
+      }
+    });
+  }
+
+  toggleMobileMenu() {
+    const sidebar = document.getElementById("sidebar");
+    const mobileToggle = document.getElementById("mobile-menu-toggle");
+
+    if (sidebar.classList.contains("open")) {
+      this.closeMobileMenu();
+    } else {
+      this.openMobileMenu();
+    }
+  }
+
+  openMobileMenu() {
+    const sidebar = document.getElementById("sidebar");
+    const mobileToggle = document.getElementById("mobile-menu-toggle");
+
+    sidebar.classList.add("open");
+    mobileToggle.classList.add("active");
+    mobileToggle.innerHTML = '<i class="fas fa-times"></i>';
+
+    // Prevent body scroll
+    document.body.style.overflow = "hidden";
+  }
+
+  closeMobileMenu() {
+    const sidebar = document.getElementById("sidebar");
+    const mobileToggle = document.getElementById("mobile-menu-toggle");
+
+    sidebar.classList.remove("open");
+    mobileToggle.classList.remove("active");
+    mobileToggle.innerHTML = '<i class="fas fa-bars"></i>';
+
+    // Restore body scroll
+    document.body.style.overflow = "";
   }
 }
 

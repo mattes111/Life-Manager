@@ -540,24 +540,113 @@ ul {
   transition: width 0.3s ease;
 }
 
-/* Responsive Design */
+/* Enhanced Responsive Design for Mobile PWA */
 @media (max-width: 768px) {
+  /* Mobile-first approach */
+  .app-container {
+    flex-direction: column;
+  }
+
   .sidebar {
     width: 100%;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100vh;
+    z-index: 2000;
+    transition: left 0.3s ease;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .sidebar-header {
+    padding: 15px 20px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     position: relative;
-    height: auto;
+  }
+
+  .sidebar-header h2 {
+    font-size: 20px;
+    margin-right: 50px;
+  }
+
+  /* Mobile menu toggle button */
+  .mobile-menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 2001;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .mobile-menu-toggle:hover {
+    transform: scale(1.1);
+  }
+
+  .mobile-menu-toggle.active {
+    background: #e53e3e;
+  }
+
+  /* Close button for mobile menu */
+  .mobile-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #4a5568;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+
+  .mobile-close:hover {
+    background: #f7fafc;
+    color: #e53e3e;
   }
 
   .main-content {
     margin-left: 0;
-    margin: 10px;
-    border-radius: 15px;
+    margin: 0;
+    padding: 80px 15px 20px;
+    border-radius: 0;
+    min-height: 100vh;
+    background: rgba(255, 255, 255, 0.95);
   }
 
+  .module-header h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  /* Mobile-optimized input groups */
   .input-group,
   .form-group {
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
   }
 
   .input-group input,
@@ -565,25 +654,276 @@ ul {
   .form-group select,
   .form-group textarea {
     min-width: auto;
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px; /* Prevents zoom on iOS */
   }
 
+  /* Mobile buttons */
+  button {
+    padding: 14px 20px;
+    font-size: 16px;
+    min-height: 48px; /* Touch-friendly */
+  }
+
+  /* Mobile cards and lists */
   .finance-overview {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .balance-card,
+  .income-card,
+  .expense-card {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .balance-card span,
+  .income-card span,
+  .expense-card span {
+    font-size: 24px;
   }
 
   .habits-grid,
   .notes-grid {
     grid-template-columns: 1fr;
+    gap: 15px;
   }
 
+  .habit-item,
+  .note-item,
+  .goal-item,
+  .skill-item {
+    padding: 15px;
+  }
+
+  /* Mobile mood selector */
   .mood-options {
-    gap: 10px;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   .mood-btn {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    min-width: 60px;
+    min-height: 60px;
+  }
+
+  /* Mobile timer */
+  .timer {
+    font-size: 36px;
+    margin-bottom: 15px;
+  }
+
+  .timer-controls {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .timer-controls button {
+    flex: 1;
+    min-width: 80px;
+  }
+
+  /* Mobile health metrics */
+  .health-metrics {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .metric-card {
+    padding: 20px;
+  }
+
+  .metric-card input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  /* Mobile filter buttons */
+  .filter-buttons {
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 10px 16px;
+    font-size: 14px;
+    flex: 1;
+    min-width: 80px;
+  }
+
+  /* Mobile list items */
+  #todo-list li,
+  .transaction-item,
+  .habit-item,
+  .goal-item,
+  .note-item,
+  .session-item,
+  .skill-item {
+    padding: 15px;
+    margin-bottom: 10px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .item-actions {
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+    flex: 1;
+    min-width: 80px;
+  }
+
+  /* Mobile modal */
+  .modal-content {
+    width: 95%;
+    margin: 10% auto;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    padding: 15px 20px;
+  }
+
+  .modal-header h2 {
     font-size: 20px;
+  }
+
+  .modal-body {
+    padding: 20px;
+  }
+
+  .modal-footer {
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modal-footer button {
+    width: 100%;
+  }
+
+  /* Mobile habit calendar */
+  .habit-calendar {
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+  }
+
+  .day {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+  }
+
+  /* Mobile progress bars */
+  .goal-progress,
+  .skill-progress {
+    height: 10px;
+  }
+
+  /* Mobile status indicators */
+  .status-indicator {
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+
+  /* Mobile install button */
+  .install-button {
+    top: 20px;
+    right: 20px;
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+
+  /* Touch-friendly improvements */
+  .menu-item {
+    padding: 18px 20px;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+  }
+
+  .menu-item i {
+    font-size: 20px;
+    width: 24px;
+  }
+
+  /* Mobile-specific utilities */
+  .mobile-only {
+    display: block;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+
+  /* Safe area for notched devices */
+  .app-container {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .main-content {
+    padding-top: calc(80px + env(safe-area-inset-top));
+  }
+}
+
+/* Tablet specific styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .sidebar {
+    width: 250px;
+  }
+
+  .main-content {
+    margin-left: 250px;
+  }
+
+  .finance-overview {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .habits-grid,
+  .notes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Large screens */
+@media (min-width: 1025px) {
+  .mobile-only {
+    display: none;
+  }
+
+  .desktop-only {
+    display: block;
+  }
+}
+
+/* PWA specific mobile optimizations */
+@media (display-mode: standalone) {
+  .main-content {
+    padding-top: 20px;
+  }
+
+  .mobile-menu-toggle {
+    top: 15px;
   }
 }
 
