@@ -5,11 +5,10 @@ const DYNAMIC_CACHE_NAME = "life-manager-dynamic-v1.0.0";
 
 // Files to cache for offline functionality
 const STATIC_FILES = [
-  "/",
-  "/index.html",
-  "/script.js",
-  "/style.css",
-  "/manifest.json",
+  "./index.html",
+  "./script.js",
+  "./style.css",
+  "./manifest.json",
   "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
 ];
 
@@ -122,7 +121,7 @@ self.addEventListener("fetch", (event) => {
 
           // Return offline page for navigation requests
           if (request.mode === "navigate") {
-            return caches.match("/index.html");
+            return caches.match("./index.html");
           }
 
           // Return cached version if available for other requests
@@ -185,8 +184,8 @@ self.addEventListener("push", (event) => {
     body: event.data
       ? event.data.text()
       : "Neue Benachrichtigung von Life Manager Pro",
-    icon: "/icons/icon-192x192.png",
-    badge: "/icons/icon-72x72.png",
+    icon: "./icons/icon-192x192.png",
+    badge: "./icons/icon-72x72.png",
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -196,12 +195,12 @@ self.addEventListener("push", (event) => {
       {
         action: "explore",
         title: "Öffnen",
-        icon: "/icons/icon-96x96.png",
+        icon: "./icons/icon-96x96.png",
       },
       {
         action: "close",
         title: "Schließen",
-        icon: "/icons/icon-96x96.png",
+        icon: "./icons/icon-96x96.png",
       },
     ],
   };
@@ -218,7 +217,7 @@ self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
   if (event.action === "explore") {
-    event.waitUntil(clients.openWindow("/"));
+    event.waitUntil(clients.openWindow("./index.html"));
   }
 });
 
